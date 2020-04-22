@@ -32,7 +32,7 @@ public class Gantt extends PApplet
 	public void printTasks()
 	{
 		for (int i = 0; i < tasks.size(); i++) {
-			System.out.println(tasks.get(i));
+			System.out.println(tasks.get(i).toString());
 		}
 	}
 	
@@ -59,7 +59,10 @@ public class Gantt extends PApplet
 	{			
 		background(0);
 		textSize(32);
-		text("Test", 10, 30); 
+		for (int i = 0; i < tasks.size(); i++) {
+			text(tasks.get(i).toString("name"), 50, (i * 50) + 10);
+		}
+		
 		fill(0, 102, 153);
 	}
 }

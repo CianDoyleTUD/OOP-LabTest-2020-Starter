@@ -22,6 +22,25 @@ public class Task
 
     public String toString()
     {
-        return this.name + ", " + this.start + ", " + this.end;
+       return this.name + ", " + this.start + ", " + this.name;
+    } 
+
+    public String toString(String field) // Method overloading so that we can specify a subsection of the string to display
+    {   
+        switch(field) {
+
+            case "name":
+                return this.name;
+
+            case "start":
+                return this.start + "";
+
+            case "end":
+                return this.end + "";
+
+            default:
+                return "";
+        }
+       
     } 
 }
