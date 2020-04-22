@@ -17,6 +17,10 @@ public class Gantt extends PApplet
 	int taskStart;
 	int taskEnd;
 	int rectW;
+	int boundX1Left;
+	int boundX1Right;
+	int boundX2Left;
+	int boundX2Right;
 	float mapValue;
 	float midValue;
 
@@ -71,18 +75,19 @@ public class Gantt extends PApplet
 
 			text(tasks.get(i).toString("name"), 30, (i * 50) + textOffset);
 
-			fill(mapValue, 100, 100);
-			stroke(mapValue, 100, 100);
-
 			taskStart = Integer.parseInt(tasks.get(i).toString("start"));
 			taskEnd = Integer.parseInt(tasks.get(i).toString("end"));
+
 			rectW = taskEnd - taskStart;
 			midValue = (taskStart + taskEnd) / 2;
 
 			mapValue = map(midValue, 0, 30, 0, 100);
+
+			fill(mapValue, 100, 100);
+			stroke(mapValue, 100, 100);
 			
-			println(mapValue);
 			rect( ( (taskStart - 1) * lineSpacing) + lineOffset, (i * 50) + 45, rectW * lineSpacing, 50);
+			tasks.get(i).updatePos( ( ( (taskStart - 1) * lineSpacing) + lineOffset), ( ( (taskEnd - 1) * lineSpacing) + lineOffset) ); // Update the task objects position values
 
 		}
 		
@@ -91,6 +96,26 @@ public class Gantt extends PApplet
 	public void mousePressed()
 	{
 		println("Mouse pressed");	
+		
+		for (int i = 0; i < tasks.size(); i++) { 
+
+			// Setting boundaries for dragging a task
+			boundX1Left = Integer.parseInt(tasks.get(i).toString("posX1")) - 20;
+			boundX1Right = Integer.parseInt(tasks.get(i).toString("posX1")) + 20;
+
+			boundX2Left = Integer.parseInt(tasks.get(i).toString("posX2")) - 20;
+			boundX2Right = Integer.parseInt(tasks.get(i).toString("posX2")) + 20;
+
+			if ( ( mouseX > boundX1Left) && ( mouseX < boundX1Right) )  { // If we are clicking the start of the box
+
+
+			}
+			else if ( ( mouseX > boundX2Left) && ( mouseX < boundX2Right) ) { // If we are clicking the end of the box
+
+
+			}
+
+		}
 	}
 
 	public void mouseDragged()
