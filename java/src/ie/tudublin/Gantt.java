@@ -3,12 +3,13 @@ package ie.tudublin;
 import processing.core.PApplet;
 import processing.data.Table;
 import processing.data.TableRow;
+import java.util.ArrayList;
  
 public class Gantt extends PApplet
 {	
 	
+	ArrayList<Task> tasks = new ArrayList<Task>();
 	Table table;
-	int end1; 
 
 	public void settings()
 	{
@@ -17,23 +18,22 @@ public class Gantt extends PApplet
 
 	public void loadTasks()
 	{
-		table = loadTable("tasks.csv", "header");
+		table = loadTable("tasks.csv", "header"); 
 
-		println(table.getRowCount() + " total rows in table");
-		for (TableRow row : table.rows()) {
+		for (TableRow row : table.rows()) { 
 
-			String task = row.getString("Task");
-			int start = row.getInt("Start");
-			int end = row.getInt("End");
-		
-			println(task + start + end);
+			Task t = new Task(row);
+			tasks.add(t);
+			
 		  }
 	  
 	}
 
 	public void printTasks()
 	{
-		
+		for (int i = 0; i < tasks.size(); i++) {
+			System.out.println(tasks.get(i));
+		}
 	}
 	
 	public void mousePressed()
@@ -51,6 +51,8 @@ public class Gantt extends PApplet
 	public void setup() 
 	{
 		loadTasks();
+		printTasks();
+		
 	}
 	
 	public void draw()
