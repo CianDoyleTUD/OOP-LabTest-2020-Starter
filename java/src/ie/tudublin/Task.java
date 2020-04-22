@@ -22,7 +22,7 @@ public class Task
 
     public String toString()
     {
-       return this.name + ", " + this.start + ", " + this.name;
+       return this.name + ", " + this.start + ", " + this.end;
     } 
 
     public String toString(String field) // Method overloading so that we can specify a subsection of the string to display
