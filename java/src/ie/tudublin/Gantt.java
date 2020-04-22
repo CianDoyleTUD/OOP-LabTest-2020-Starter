@@ -88,11 +88,10 @@ public class Gantt extends PApplet
 			taskEnd = Integer.parseInt(tasks.get(i).toString("end"));
 
 			rectW = taskEnd - taskStart;
-			midValue = (taskStart + taskEnd) / 2;
 
-			mapValue = map(midValue, 0, 30, 0, 100);
+			mapValue = map(i, 0, tasks.size(), 0, 100);
 
-			fill(mapValue, 100, 100);
+			fill(mapValue, 100, 100); 
 			stroke(mapValue, 100, 100);
 
 			rect( Integer.parseInt(tasks.get(i).toString("posX1")), (i * 50) + 45, rectW * lineSpacing, 50);
@@ -143,23 +142,23 @@ public class Gantt extends PApplet
 
 	public void mouseReleased() {
 		
-		movedAmount = (mouseX - mouseXStart) / lineSpacing;
+		movedAmount = (mouseX - mouseXStart) / lineSpacing; // could've used map function here also.
 
 		rectL = Integer.parseInt(tasks.get(currBox).toString("end")) - Integer.parseInt(tasks.get(currBox).toString("start")); 
 
 		if (toMove == "start" && movedAmount < rectL) {
 
-			if ( ((Integer.parseInt(tasks.get(currBox).toString("start")) + movedAmount) >= 0) && ((Integer.parseInt(tasks.get(currBox).toString("start")) + movedAmount) <= maxTime) ) { // If the change is between the allow values
+			if ( ((Integer.parseInt(tasks.get(currBox).toString("start")) + movedAmount) > 0) && ((Integer.parseInt(tasks.get(currBox).toString("start")) + movedAmount) <= maxTime) ) { // If the change is between the allow values
 
 				tasks.get(currBox).updatePos(Integer.parseInt(tasks.get(currBox).toString("posX1")) + (movedAmount * lineSpacing), Integer.parseInt(tasks.get(currBox).toString("posX2")));
 				tasks.get(currBox).updateLength( Integer.parseInt(tasks.get(currBox).toString("start")) + movedAmount, Integer.parseInt(tasks.get(currBox).toString("end")) );
 			
-			}
+			} // NOTE: If the user drags too far, past 0 or 30, no change will be made.
 
 		}
 		else if (toMove == "end" && movedAmount < rectL) {
 
-			if ( ((Integer.parseInt(tasks.get(currBox).toString("end")) + movedAmount) >= 0) && ((Integer.parseInt(tasks.get(currBox).toString("end")) + movedAmount) <= maxTime) ) { // If the change is between the allow values
+			if ( ((Integer.parseInt(tasks.get(currBox).toString("end")) + movedAmount) > 0) && ((Integer.parseInt(tasks.get(currBox).toString("end")) + movedAmount) <= maxTime) ) { // If the change is between the allow values
 
 				tasks.get(currBox).updatePos(Integer.parseInt(tasks.get(currBox).toString("posX1")), Integer.parseInt(tasks.get(currBox).toString("posX2")) + (movedAmount * lineSpacing));
 				tasks.get(currBox).updateLength( Integer.parseInt(tasks.get(currBox).toString("start")), Integer.parseInt(tasks.get(currBox).toString("end")) + movedAmount );
@@ -167,15 +166,13 @@ public class Gantt extends PApplet
 			}
 
 		}
-
-		printTasks();
 		
-
 	}
 
 	public void mouseDragged()
 	{
-		// I used mouseReleased instead as I found it more convenient. It's a bit less interactive but its achieves the same effect.
+		// I used mouseReleased instead of mouseDragged as I found it more convenient. It's a bit less interactive but its achieves the same effect.
+		// NOTE: To change times you still have to hold the mouse button down and drag, once released it will change.
 	}
 	
 	public void setup() 
