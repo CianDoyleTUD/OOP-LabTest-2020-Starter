@@ -1,7 +1,7 @@
 package ie.tudublin;
 
 import processing.data.TableRow;
-
+    
 public class Task
 {
     private String name;
@@ -15,8 +15,8 @@ public class Task
         this.name = name;
         this.start = start;
         this.end = end;
-        this.posX1 = 0;
-        this.posX2 = 0;
+        this.posX1 = ((start - 1) * 20) + 180;
+        this.posX2 = ((end - 1) * 20) + 180;
     }
 
     public Task(TableRow tr)

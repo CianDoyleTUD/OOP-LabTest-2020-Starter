@@ -21,6 +21,11 @@ public class Gantt extends PApplet
 	int boundX1Right;
 	int boundX2Left;
 	int boundX2Right;
+	int boundYTop;
+	int boundYBottom;
+	int currBox;
+	boolean draggingBox;
+	boolean locked = false;
 	float mapValue;
 	float midValue;
 
@@ -85,9 +90,8 @@ public class Gantt extends PApplet
 
 			fill(mapValue, 100, 100);
 			stroke(mapValue, 100, 100);
-			
-			rect( ( (taskStart - 1) * lineSpacing) + lineOffset, (i * 50) + 45, rectW * lineSpacing, 50);
-			tasks.get(i).updatePos( ( ( (taskStart - 1) * lineSpacing) + lineOffset), ( ( (taskEnd - 1) * lineSpacing) + lineOffset) ); // Update the task objects position values
+
+			rect( Integer.parseInt(tasks.get(i).toString("posX1")), (i * 50) + 45, rectW * lineSpacing, 50);
 
 		}
 		
@@ -95,8 +99,7 @@ public class Gantt extends PApplet
 	
 	public void mousePressed()
 	{
-		println("Mouse pressed");	
-		
+
 		for (int i = 0; i < tasks.size(); i++) { 
 
 			// Setting boundaries for dragging a task
@@ -106,33 +109,69 @@ public class Gantt extends PApplet
 			boundX2Left = Integer.parseInt(tasks.get(i).toString("posX2")) - 20;
 			boundX2Right = Integer.parseInt(tasks.get(i).toString("posX2")) + 20;
 
-			if ( ( mouseX > boundX1Left) && ( mouseX < boundX1Right) )  { // If we are clicking the start of the box
+			boundYTop = (i * 50) + 45;
+			boundYBottom = (i * 50) + 95;
 
+			println("((((((((" + mouseY + ")))))))");
+			println(boundYTop + " - " + boundYBottom);
+			if ( ( mouseX > boundX1Left) && ( mouseX < boundX1Right) &&  (mouseY > boundYTop) && (mouseY < boundYBottom))  { // If we are clicking the start of the box
+
+				draggingBox = true;
+				currBox = i;
+				println(currBox);
 
 			}
-			else if ( ( mouseX > boundX2Left) && ( mouseX < boundX2Right) ) { // If we are clicking the end of the box
+			else if ( ( mouseX > boundX2Left) && ( mouseX < boundX2Right) && (mouseY > boundYTop) && (mouseY < boundYBottom)) { // If we are clicking the end of the box
 
+				draggingBox = true;
+				currBox = i;
 
 			}
 
 		}
+
+	}
+
+	public void mouseReleased() {
+
+		currBox = 99; // reset after mouse is lifted
+
 	}
 
 	public void mouseDragged()
 	{
-		println("Mouse dragged");
+	
+		if(locked && (currBox != 99)) {
+
+			tasks.get(currBox).updatePos( mouseX , Integer.parseInt(tasks.get(currBox).toString("posX1")) );
+
+		}
 	}
 	
 	public void setup() 
 	{
 		loadTasks();
-		printTasks();
+		printTasks(); 
 		
 	}
 	
 	public void draw()
 	{			
 		background(0);
+
 		displayTasks();
+
+		if(draggingBox) { 
+
+			locked = true; 
+
+		}
+		else {
+
+			locked = false;
+
+		}
+
+		
 	}
 }
