@@ -47,18 +47,23 @@ public class Gantt extends PApplet
 
 	public void displayTasks() {
 
-		textSize(15);
+		textSize(10);
 
 		maxTime = Integer.parseInt(tasks.get(tasks.size() - 1).toString("end")); // Store the last task's end time the chart into the variable maxTime, in this case it will be 30.
 
 		colorMode(HSB, 100);
 		stroke(0, 0, 100);
+		fill(0, 0, 100);
 
-		for (int i = 0; i < maxTime; i++) { // Create lines
+		for (int i = 0; i < maxTime; i++) { // Create lines and times
 
+			text(i + 1, ( (i * lineSpacing) - 1) + lineOffset, 35);
 			line((i * lineSpacing) + lineOffset, 50, (i * lineSpacing) + lineOffset, ((tasks.size() - 1) * 50) + textOffset + 15); // Making sure the lines are an appropriate length, given how many tasks are present and factoring in text size
+			
 
-		}
+		}	
+
+		textSize(15);
 
 		for (int i = 0; i < tasks.size(); i++) { // Everything else
 
