@@ -24,10 +24,17 @@ public class Task
         this(tr.getString("Task"), tr.getInt("Start"), tr.getInt("End"));
     }
 
-    public void updatePos(int posX1, int posX2) { // For keeping track of a tasks position on the graph, helpful with the last part of test.
+    public void updatePos(int posX1, int posX2)  // For keeping track of a tasks position on the graph, helpful with the last part of test.
+    {
         this.posX1 = posX1;
         this.posX2 = posX2;
     } 
+
+    public void updateLength(int start, int end) // For changing the length of tasks
+    { 
+        this.start = start;
+        this.end = end;
+    }
 
     public String toString()
     {

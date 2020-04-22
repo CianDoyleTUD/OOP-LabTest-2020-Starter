@@ -24,10 +24,14 @@ public class Gantt extends PApplet
 	int boundYTop;
 	int boundYBottom;
 	int currBox;
+	int mouseXStart;
+	int movedAmount;
+	int rectL;
 	boolean draggingBox;
 	boolean locked = false;
 	float mapValue;
 	float midValue;
+	String toMove;
 
 	public void settings()
 	{
@@ -112,19 +116,24 @@ public class Gantt extends PApplet
 			boundYTop = (i * 50) + 45;
 			boundYBottom = (i * 50) + 95;
 
-			println("((((((((" + mouseY + ")))))))");
-			println(boundYTop + " - " + boundYBottom);
-			if ( ( mouseX > boundX1Left) && ( mouseX < boundX1Right) &&  (mouseY > boundYTop) && (mouseY < boundYBottom))  { // If we are clicking the start of the box
+			if ((mouseY > boundYTop) && (mouseY < boundYBottom)) { // Check if we are between the y-boundaries of this box, if so, continue
 
-				draggingBox = true;
-				currBox = i;
-				println(currBox);
+				if ( ( mouseX > boundX1Left) && ( mouseX < boundX1Right) )  { // If we are clicking the start of the box
 
-			}
-			else if ( ( mouseX > boundX2Left) && ( mouseX < boundX2Right) && (mouseY > boundYTop) && (mouseY < boundYBottom)) { // If we are clicking the end of the box
-
-				draggingBox = true;
-				currBox = i;
+					draggingBox = true;
+					mouseXStart = mouseX;
+					currBox = i;
+					toMove = "start";
+	
+				}
+				else if ( ( mouseX > boundX2Left) && ( mouseX < boundX2Right) ) { // If we are clicking the end of the box
+	
+					draggingBox = true;
+					mouseXStart = mouseX;
+					currBox = i;
+					toMove = "end";
+	
+				}
 
 			}
 
@@ -133,19 +142,40 @@ public class Gantt extends PApplet
 	}
 
 	public void mouseReleased() {
+		
+		movedAmount = (mouseX - mouseXStart) / lineSpacing;
 
-		currBox = 99; // reset after mouse is lifted
+		rectL = Integer.parseInt(tasks.get(currBox).toString("end")) - Integer.parseInt(tasks.get(currBox).toString("start")); 
+
+		if (toMove == "start" && movedAmount < rectL) {
+
+			if ( ((Integer.parseInt(tasks.get(currBox).toString("start")) + movedAmount) >= 0) && ((Integer.parseInt(tasks.get(currBox).toString("start")) + movedAmount) <= maxTime) ) { // If the change is between the allow values
+
+				tasks.get(currBox).updatePos(Integer.parseInt(tasks.get(currBox).toString("posX1")) + (movedAmount * lineSpacing), Integer.parseInt(tasks.get(currBox).toString("posX2")));
+				tasks.get(currBox).updateLength( Integer.parseInt(tasks.get(currBox).toString("start")) + movedAmount, Integer.parseInt(tasks.get(currBox).toString("end")) );
+			
+			}
+
+		}
+		else if (toMove == "end" && movedAmount < rectL) {
+
+			if ( ((Integer.parseInt(tasks.get(currBox).toString("end")) + movedAmount) >= 0) && ((Integer.parseInt(tasks.get(currBox).toString("end")) + movedAmount) <= maxTime) ) { // If the change is between the allow values
+
+				tasks.get(currBox).updatePos(Integer.parseInt(tasks.get(currBox).toString("posX1")), Integer.parseInt(tasks.get(currBox).toString("posX2")) + (movedAmount * lineSpacing));
+				tasks.get(currBox).updateLength( Integer.parseInt(tasks.get(currBox).toString("start")), Integer.parseInt(tasks.get(currBox).toString("end")) + movedAmount );
+
+			}
+
+		}
+
+		printTasks();
+		
 
 	}
 
 	public void mouseDragged()
 	{
-	
-		if(locked && (currBox != 99)) {
-
-			tasks.get(currBox).updatePos( mouseX , Integer.parseInt(tasks.get(currBox).toString("posX1")) );
-
-		}
+		// I used mouseReleased instead as I found it more convenient. It's a bit less interactive but its achieves the same effect.
 	}
 	
 	public void setup() 
