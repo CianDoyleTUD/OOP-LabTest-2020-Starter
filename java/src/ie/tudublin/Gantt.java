@@ -11,6 +11,12 @@ public class Gantt extends PApplet
 	ArrayList<Task> tasks = new ArrayList<Task>();
 	Table table;
 	int maxTime;
+	int textOffset = 80;
+	int lineOffset = 180;
+	int lineSpacing = 20;
+	int taskStart;
+	int taskEnd;
+	int rectW;
 
 	public void settings()
 	{
@@ -39,15 +45,26 @@ public class Gantt extends PApplet
 
 	public void displayTasks() {
 
-		textSize(20);
+		textSize(15);
 
 		maxTime = Integer.parseInt(tasks.get(tasks.size() - 1).toString("end")); // Store the last task's end time the chart into the variable maxTime, in this case it will be 30.
 
-		for (int i = 0; i < tasks.size(); i++) {
+		for (int i = 0; i < maxTime; i++) { // Create lines
 
-			text(tasks.get(i).toString("name"), 30, (i * 50) + 50);
 			stroke(126);
-			line((i * 50) + 50, 50,(i * 50) + 500, 75);
+			line((i * lineSpacing) + lineOffset, 50, (i * lineSpacing) + lineOffset, ((tasks.size() - 1) * 50) + textOffset + 15); // Making sure the lines are an appropriate length, given how many tasks are present and factoring in text size
+
+		}
+
+		for (int i = 0; i < tasks.size(); i++) { // Everything else
+
+			text(tasks.get(i).toString("name"), 30, (i * 50) + textOffset);
+
+			taskStart = Integer.parseInt(tasks.get(i).toString("start"));
+			taskEnd = Integer.parseInt(tasks.get(i).toString("end"));
+			rectW = taskEnd - taskStart;
+
+			rect( ( (taskStart - 1) * lineSpacing) + lineOffset, (i * 50) + 45, rectW * lineSpacing, 50);
 
 		}
 
